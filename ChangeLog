@@ -1,3 +1,9 @@
+mochad-0.1.16
+    * Remove OpenRemote support
+    * Remove XML Support
+    * Remove datetime from response message
+    * Response is CSV format
+
 mochad-0.1.15
 
     * Add support for newer CM19A built in 2011 or later.

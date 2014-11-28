@@ -237,7 +237,7 @@ void cm15a_decode_plc(int fd, unsigned char *buf, size_t len)
             }
             unitint = huc_decode(buf[3], &housechar);
             hua_add(housechar-'A', unitint-1);
-            sockprintf(fd, "%cx PL HouseUnit: %c%d\n", 
+            sockprintf(fd, "%cx,PL,%c%d\n", 
                     (buf[0] == 0x5a) ? 'R' : 'T',
                     housechar, unitint);
             break;
@@ -293,7 +293,7 @@ void cm15a_decode_plc(int fd, unsigned char *buf, size_t len)
                 default:
                     break;
             }
-            sockprintf(fd, "%cx PL House: %c Func: %s\n",
+            sockprintf(fd, "%cx,PL,%c,%s\n",
                     (buf[0] == 0x5a) ? 'R' : 'T',
                     housechar, Funcname[funcint]);
             dbprintf("exit case 0x01\n");
@@ -306,7 +306,7 @@ void cm15a_decode_plc(int fd, unsigned char *buf, size_t len)
             }
             dims = (buf[3] & 0xF8) >> 3;
             funcint = hfc_decode(buf[4], &housechar);
-            sockprintf(fd, "%cx PL House: %c Func: %s(%d)\n",
+            sockprintf(fd, "%cx,PL,%c,%s(%d)\n",
                     (buf[0] == 0x5a) ? 'R' : 'T',
                     housechar, Funcname[funcint], dims);
             break;
@@ -329,7 +329,7 @@ void cm15a_decode_plc(int fd, unsigned char *buf, size_t len)
             }
             funcint = hfc_decode(buf[3], &housechar);
             unitint = uc_decode(buf[4]);
-            sockprintf(fd, "%cx PL HouseUnit: %c%d Func: %s Data: %02X Command: %02X\n",
+            sockprintf(fd, "%cx,PL,%c%d,%s, Data: %02X Command: %02X\n",
                     (buf[0] == 0x5a) ? 'R' : 'T',
                     housechar, unitint, Funcname[funcint], buf[5], buf[6]);
             hua_setstatus_xdim(housechar-'A', unitint-1, buf[5]);
@@ -357,7 +357,7 @@ void cm15a_decode_plc(int fd, unsigned char *buf, size_t len)
             }
             funcint = hfc_decode(buf[6], &housechar);
             unitint = uc_decode(buf[5]);
-            sockprintf(fd, "%cx PL HouseUnit: %c%d Func: %s Data: %02X Command: %02X\n",
+            sockprintf(fd, "%cx,PL,%c%d,%s, Data: %02X Command: %02X\n",
                     (buf[0] == 0x5a) ? 'R' : 'T',
                     housechar, unitint, Funcname[funcint], buf[4], buf[3]);
             hua_setstatus_xdim(housechar-'A', unitint-1, buf[4]);
@@ -507,7 +507,7 @@ int findCamRemoteCommand(const char *keyname)
 }
 
 /*
- * 5D 29 7F 70 8C 73 CA 00 from MS10,DS10,KR10 17(?) bit RF address 
+ * 5D 29 7F 70 8C 73 CA 00 from MS10,DS10,KR10 17(?) bit RF address
  *        |  |  |  |  |  |
  *        |  |  |  |  |  addr3
  *        |  |  |  |  addr2
@@ -734,7 +734,7 @@ void cm15a_decode_rf(int fd, unsigned char *buf, unsigned int len)
             commandp = findCamRemoteName(&buf[1], len-1);
             if (commandp) {
                 if (dup_filter(buf, len)) return;
-                sockprintf(fd, "%cx RFCAM %s\n", (buf[0] == 0x5d) ? 'R' : 'T',
+                sockprintf(fd, "%cx,RFCAM,%s\n", (buf[0] == 0x5d) ? 'R' : 'T',
                        commandp);
                 repeatRF(fd, buf, len);
             }
@@ -762,7 +762,7 @@ void cm15a_decode_rf(int fd, unsigned char *buf, unsigned int len)
                 secaddr[1] = 0;
                 secaddr[2] = buf[2];
                 hua_sec_event(secaddr, buf[4], 1);
-                sockprintf(fd, "%cx RFSEC Addr: 0x%02X Func: %s\n",
+                sockprintf(fd, "%cx,RFSEC,0x%02X,%s\n",
                        (buf[0] == 0x5d) ? 'R' : 'T',
                         buf[2], findSecRemoteKeyName(buf[4]));
                 repeatRF(fd, buf, len);
@@ -785,7 +785,7 @@ void cm15a_decode_rf(int fd, unsigned char *buf, unsigned int len)
                 unitint = hufc_decode(buf[2], buf[4], &housechar, &funcint);
                 /* dbprintf("h %c func %d\n", housechar, funcint); */
                 if (funcint > 1) {  // Dim or Bright
-                    sockprintf(fd, "%cx RF House: %c Func: %s\n", 
+                    sockprintf(fd, "%cx,RF,%c,%s\n", 
                             (buf[0] == 0x5d) ? 'R' : 'T',
                             housechar, Funcname[funcint+2]);
                     repeatRF(fd, buf, len);
@@ -806,7 +806,7 @@ void cm15a_decode_rf(int fd, unsigned char *buf, unsigned int len)
                         hua_func_off(housechar-'A');
                     else
                         hua_func_on(housechar-'A');
-                    sockprintf(fd, "%cx RF HouseUnit: %c%d Func: %s\n", 
+                    sockprintf(fd, "%cx,RF,%c%d,%s\n", 
                             (buf[0] == 0x5d) ? 'R' : 'T',
                             housechar, unitint, Funcname[funcint+2]);
                     repeatRF(fd, buf, len);
@@ -833,7 +833,7 @@ void cm15a_decode_rf(int fd, unsigned char *buf, unsigned int len)
                 case 0:
                     if (dup_filter(buf, len)) return;
                     hua_sec_event(secaddr, funcint, 0);
-                    sockprintf(fd, "%cx RFSEC Addr: %02X:%02X:%02X Func: %s\n", 
+                    sockprintf(fd, "%cx,RFSEC,%02X:%02X:%02X,%s\n", 
                             (buf[0] == 0x5d) ? 'R' : 'T',
                             secaddr[0], secaddr[1], secaddr[2],
                             findSecEventName(funcint));

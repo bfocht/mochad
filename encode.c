@@ -405,7 +405,7 @@ static int pl_tx_houseunit(int fd, int house, int unit)
 }
 
 /* Extended code 1 */
-static int pl_tx_extended_code_1(int fd, int house, int unit, int command, 
+static int pl_tx_extended_code_1(int fd, int house, int unit, int command,
         int subcmd, int param)
 {
     unsigned char buf[7];
@@ -602,13 +602,6 @@ static int rf_tx_houseunitfunc(int fd, int house, int unit, int func)
         return x10_write(buf, sizeof(buf));
 }
 
-static const char DOMAINPOLICY[] = 
-    "<?xml version=\"1.0\"?>"
-    "<!DOCTYPE cross-domain-policy SYSTEM \"http://www.adobe.com/xml/dtds/cross-domain-policy.dtd\">"
-    "<cross-domain-policy>"
-    "<allow-access-from domain=\"*.chumby.com\" to-ports=\"1100\" />"
-    "</cross-domain-policy>";
-
 /* aLine looks something like the following
  * pl a1 on
  * rf a1 on
@@ -625,15 +618,10 @@ int processcommandline(int fd, char *aLine)
 
     strupper(aLine);
     dbprintf("%lu:%s\n", (unsigned long)strlen(aLine), aLine);
-    if (strcmp(aLine, "<POLICY-FILE-REQUEST/>") == 0) {
-        /* Yes, this sends the '\0' terminator which is required. */
-        send(fd, DOMAINPOLICY, sizeof(DOMAINPOLICY), MSG_NOSIGNAL);
-        return 0;
-    }
+    
     command = strtok(aLine, " ");
     if (command) {
         if (strcmp(command, "PL") == 0) {
-            if (or20client(fd)) statusprintf(fd, "ok\n");
             house = getdeviceaddr(&unit);
             dbprintf("house %d unit %d\n", house, unit);
             if (house < 0) return -1;
@@ -684,7 +672,6 @@ int processcommandline(int fd, char *aLine)
             }
         }
         else if (strcmp(command, "RF") == 0) {
-            if (or20client(fd)) statusprintf(fd, "ok\n");
             house = getdeviceaddr(&unit);
             dbprintf("house %d unit %d\n", house, unit);
             if (house < 0) return -1;
@@ -693,7 +680,6 @@ int processcommandline(int fd, char *aLine)
             rf_tx_houseunitfunc(fd, house, unit, func);
         }
         else if (strcmp(command, "RFSEC") == 0) {
-            if (or20client(fd)) statusprintf(fd, "ok\n");
             rfaddr = 0;
             rf8bitaddr = getrfaddr(&rfaddr);
             dbprintf("rfaddr 8bit: %d %X\n", rf8bitaddr, rfaddr);
@@ -704,7 +690,6 @@ int processcommandline(int fd, char *aLine)
             rfsec_tx(fd, rf8bitaddr, rfaddr, func);
         }
         else if (strcmp(command, "RFCAM") == 0) {
-            if (or20client(fd)) statusprintf(fd, "ok\n");
             /* Unit number is ignored */
             house = getdeviceaddr(&unit);
             if (house < 0) return -1;
@@ -732,7 +717,6 @@ int processcommandline(int fd, char *aLine)
             }
         }
         else if (strcmp(command, "PT") == 0) {
-            if (or20client(fd)) statusprintf(fd, "ok\n");
             len = gethexdata(x10bytes8);
             hexdump (x10bytes8, len);
             if (len > 0) x10_write(x10bytes8, len);
@@ -760,12 +744,10 @@ int processcommandline(int fd, char *aLine)
         }
 #endif
         else if (strcmp(command, "RFTOPL") == 0) {
-            if (or20client(fd)) statusprintf(fd, "ok\n");
             RfToPl16 = gethousecodes();
             sockprintf(fd, "RfToPl %04X\n", RfToPl16);
         }
         else if (strcmp(command, "RFTORF") == 0) {
-            if (or20client(fd)) statusprintf(fd, "ok\n");
             arg1 = strtok(NULL, " ");
             if (arg1) RfToRf16 = (unsigned short)strtoul(arg1, NULL, 10);
             sockprintf(fd, "RfToRf %04X\n", RfToRf16);
@@ -839,7 +821,6 @@ void cm15a_encode(int fd, unsigned char * buf, size_t buflen)
             *remptr = '\0';
             if (strlen(remainder)) {
                 processcommandline(fd, remainder);
-                if (or20client(fd)) del_client(fd);
             }
             remptr = remainder;
         }
