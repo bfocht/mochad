@@ -8,12 +8,7 @@ autom4te.cache/
 autoscan.log
 config.log
 config.status
-depcomp
-missing
-install-sh
 aclocal.m4
 Makefile
 !opkg/Makefile
-Makefile.in
 config.h*
-configure
