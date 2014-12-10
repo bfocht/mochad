@@ -1,8 +1,11 @@
-mochad-0.1.16
+mochad-0.1.17
     * Remove OpenRemote support
     * Remove XML Support
     * Remove datetime from response message
     * Response is CSV format
+
+mochad-0.1.16
+    * Fix "Could not find endpoints" problem.
 
 mochad-0.1.15
 
