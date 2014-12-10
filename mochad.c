@@ -354,7 +354,7 @@ static int get_endpoint_address(libusb_device_handle *devh, uint8_t *inendpt, ui
         interfaces++;
     }
     libusb_free_config_descriptor(config);
-    return 0;
+    return r;
 }
 
 static void IntrOut_cb(struct libusb_transfer *transfer)
