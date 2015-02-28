@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+</head>
+<body>
+<div id="column-content">
+	<div id="content">
+		<a name="top" id="top"></a>
+				<h1 id="firstHeading" class="firstHeading">Mochad Reference</h1>
+		<div id="bodyContent">
+			<h3 id="siteSub">From mochad</h3>
+			<div id="contentSub"></div>
+									<div id="jump-to-nav">Jump to: <a href="#column-one">navigation</a>, <a href="#searchInput">search</a></div>			<!-- start content -->
+			<p><big>mochad Command Reference</big>
+</p>
+<table id="toc" class="toc" summary="Contents"><tbody><tr><td><div id="toctitle"><h2>Contents</h2> <span class="toctoggle">[<a id="togglelink" class="internal" href="javascript:toggleToc()">hide</a>]</span></div>
+<ul>
+<li class="toclevel-1"><a href="#Commands"><span class="tocnumber">1</span> <span class="toctext">Commands</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Abbreviations"><span class="tocnumber">1.1</span> <span class="toctext">Abbreviations</span></a></li>
+<li class="toclevel-2"><a href="#Power_Line_Commands"><span class="tocnumber">1.2</span> <span class="toctext">Power Line Commands</span></a></li>
+<li class="toclevel-2"><a href="#Radio_Frequency_Commands"><span class="tocnumber">1.3</span> <span class="toctext">Radio Frequency Commands</span></a></li>
+<li class="toclevel-2"><a href="#RF_Security_Commands"><span class="tocnumber">1.4</span> <span class="toctext">RF Security Commands</span></a></li>
+<li class="toclevel-2"><a href="#RF_Camera_Commands"><span class="tocnumber">1.5</span> <span class="toctext">RF Camera Commands</span></a></li>
+<li class="toclevel-2"><a href="#RF_to_PL_repeater"><span class="tocnumber">1.6</span> <span class="toctext">RF to PL repeater</span></a></li>
+<li class="toclevel-2"><a href="#Pass_through"><span class="tocnumber">1.7</span> <span class="toctext">Pass through</span></a></li>
+<li class="toclevel-2"><a href="#Device_status"><span class="tocnumber">1.8</span> <span class="toctext">Device status</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Event_Messages"><span class="tocnumber">2</span> <span class="toctext">Event Messages</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Receive_event_messages"><span class="tocnumber">2.1</span> <span class="toctext">Receive event messages</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Power_Line"><span class="tocnumber">2.1.1</span> <span class="toctext">Power Line</span></a></li>
+<li class="toclevel-3"><a href="#Radio_Frequency"><span class="tocnumber">2.1.2</span> <span class="toctext">Radio Frequency</span></a></li>
+<li class="toclevel-3"><a href="#RF_Security"><span class="tocnumber">2.1.3</span> <span class="toctext">RF Security</span></a></li>
+<li class="toclevel-3"><a href="#RF_Camera"><span class="tocnumber">2.1.4</span> <span class="toctext">RF Camera</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Transmit_event_messages"><span class="tocnumber">2.2</span> <span class="toctext">Transmit event messages</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></tbody></table><script type="text/javascript"> if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<a name="Commands" id="Commands"></a><h2> <span class="mw-headline"> Commands </span></h2>
+<p>The following commands cause the CM15A/CM19A to send on power line or radio
+frequency.
+</p>
+<a name="Abbreviations" id="Abbreviations"></a><h3> <span class="mw-headline"> Abbreviations </span></h3>
+<pre>    &lt;H&gt; = A..P              House code
+    &lt;U&gt; = 1..16             Unit/device code
+    &lt;Dims&gt; = 0..31          Dim/bright range
+    &lt;Xdims&gt; = 0x00..0xFF    Extended Preset dim range
+    &lt;SecAddr8&gt; = 0x00..0xFF RF security 8 bit address
+    &lt;SecAddr17&gt; = hh:hh:hh where h = hexideciaml digit 0-9a-f
+                            RF Security 17 bit address. Valid bits are defined by 
+                            the mask FF:FF:80
+
+    The following are use in the extended_code_1 command
+    &lt;Type&gt;      Command type 0..15
+                    0 = Shutters, sunshades, blinds
+                    1 = Sensors
+                    2 = reserved
+                    3 = Control modules (dimmers and appliances)
+                    4 = Extended secure addressing
+                    5 = Extended secure address for groups
+                    6 - 15 = not specified
+    &lt;Func&gt;      Command function 0..15
+    &lt;Param&gt;     Command parameter 0..255
+
+See the X10 Extended Code document target:ftp://ftp.x10.com/pub/manuals/xtdcode.pdf for functions and data values available for each command type.
+</pre>
+<pre>    PL = power line
+    RF = radio frequency
+    Tx = transmit
+    Rx = receive
+</pre>
+<a name="Power_Line_Commands" id="Power_Line_Commands"></a><h3> <span class="mw-headline"> Power Line Commands </span></h3>
+<pre>    pl &lt;H&gt;&lt;U&gt;
+    pl &lt;H&gt;&lt;U&gt; on
+    pl &lt;H&gt;&lt;U&gt; off
+    pl &lt;H&gt;&lt;U&gt; dim &lt;Dims&gt;
+    pl &lt;H&gt;&lt;U&gt; bright &lt;Dims&gt;
+    pl &lt;H&gt;&lt;U&gt; xdim &lt;Xdims&gt;
+    pl &lt;H&gt;&lt;U&gt; status_on
+    pl &lt;H&gt;&lt;U&gt; status_off
+    pl &lt;H&gt;&lt;U&gt; status_request
+    pl &lt;H&gt;&lt;U&gt; extended_code_1 &lt;Type&gt; &lt;Func&gt; &lt;Param&gt;
+
+</pre>
+<pre>    pl &lt;H&gt; on
+    pl &lt;H&gt; off
+    pl &lt;H&gt; dim &lt;Dims&gt;
+    pl &lt;H&gt; bright &lt;Dims&gt;
+    pl &lt;H&gt; xdim &lt;Xdims&gt;
+    pl &lt;H&gt; all_units_off
+    pl &lt;H&gt; all_lights_on
+    pl &lt;H&gt; all_lights_off
+</pre>
+<a name="Radio_Frequency_Commands" id="Radio_Frequency_Commands"></a><h3> <span class="mw-headline"> Radio Frequency Commands </span></h3>
+<pre>    rf &lt;H&gt;&lt;U&gt; on
+    rf &lt;H&gt;&lt;U&gt; off
+    rf &lt;H&gt;&lt;U&gt; dim
+    rf &lt;H&gt;&lt;U&gt; bright
+</pre>
+<a name="RF_Security_Commands" id="RF_Security_Commands"></a><h3> <span class="mw-headline"> RF Security Commands </span></h3>
+<pre>    rfsec &lt;Secaddr8&gt; arm
+    rfsec &lt;Secaddr8&gt; arm_home_min
+    rfsec &lt;Secaddr8&gt; arm_away_min
+    rfsec &lt;Secaddr8&gt; arm_home_max
+    rfsec &lt;Secaddr8&gt; arm_away_max
+    rfsec &lt;Secaddr8&gt; disarm
+    rfsec &lt;Secaddr8&gt; panic
+    rfsec &lt;Secaddr8&gt; lights_on
+    rfsec &lt;Secaddr8&gt; lights_off
+</pre>
+<pre>    rfsec &lt;Secaddr17&gt; arm
+    rfsec &lt;Secaddr17&gt; disarm
+    rfsec &lt;Secaddr17&gt; panic
+    rfsec &lt;Secaddr17&gt; lights_on
+    rfsec &lt;Secaddr17&gt; lights_off
+</pre>
+<a name="RF_Camera_Commands" id="RF_Camera_Commands"></a><h3> <span class="mw-headline"> RF Camera Commands </span></h3>
+<pre>    rfcam &lt;H&gt; camup
+    rfcam &lt;H&gt; camdown
+    rfcam &lt;H&gt; camleft
+    rfcam &lt;H&gt; camright
+    rfcam &lt;H&gt; camcenter
+    rfcam &lt;H&gt; camsweep
+    rfcam &lt;H&gt; campreset1
+    rfcam &lt;H&gt; campreset2
+    rfcam &lt;H&gt; campreset3
+    rfcam &lt;H&gt; campreset4
+    rfcam &lt;H&gt; campreset5
+    rfcam &lt;H&gt; campreset6
+    rfcam &lt;H&gt; campreset7
+    rfcam &lt;H&gt; campreset8
+    rfcam &lt;H&gt; campreset9
+    rfcam &lt;H&gt; cameditpreset1
+    rfcam &lt;H&gt; cameditpreset2
+    rfcam &lt;H&gt; cameditpreset3
+    rfcam &lt;H&gt; cameditpreset4
+    rfcam &lt;H&gt; cameditpreset5
+    rfcam &lt;H&gt; cameditpreset6
+    rfcam &lt;H&gt; cameditpreset7
+    rfcam &lt;H&gt; cameditpreset8
+    rfcam &lt;H&gt; cameditpreset9
+</pre>
+<a name="RF_to_PL_repeater" id="RF_to_PL_repeater"></a><h3> <span class="mw-headline"> RF to PL repeater </span></h3>
+<p>By default, received RF X10 commands are repeated on the PL interface for all
+house codes. This can be changed using the rftopl command (RF to PL repeater).
+</p>
+<pre>   rftopl *    -- enable all house codes (default)
+   rftopl abc  -- enable for house codes A, B, and C. Disable for all others.
+   rftopl 0    -- disable for all house codes. This is useful if more than
+                   one CM15A is in use. Leaving both enabled will result in 
+                   PL collisions and redundant commands.
+</pre>
+<a name="Pass_through" id="Pass_through"></a><h3> <span class="mw-headline"> Pass through </span></h3>
+<p>For testing, the passthrough command will pass raw binary data to the USB 
+controller. This can be used to send vendor-specific or custom commands.
+</p>
+<pre>   pt hh hh ... hh -- h is a hexidecimal digit [0-9A-F]. Each pair of
+                      hex digits must be separated by 1 or more spaces.
+</pre>
+<a name="Device_status" id="Device_status"></a><h3> <span class="mw-headline"> Device status </span></h3>
+<pre>   st          -- Get status of X10 devices including security sensors
+   st 0        -- Clear device status
+</pre>
+<p>The output is designed to be easily parsed on embedded systems without using
+external libraries. Use the Perl split() function or something similar.
+</p>
+<pre>   12/17 12:03:45 Device selected
+   12/17 12:03:45 House A: 1
+   12/17 12:03:45 House B: 5
+   12/17 12:03:45 Device status
+   12/17 12:03:45 House A: 1=1
+   12/17 12:03:45 House B: 1=0,2=0,3=0,4=0,5=0
+   12/17 12:03:45 Security sensor status
+   12/17 12:03:45 Sensor addr: 569E80 Last: 39:09 Motion_normal_MS10A 
+   12/17 12:03:45 Sensor addr: 9FAA00 Last: 50:02 Contact_alert_min_DS10A 
+   12/17 12:03:45 End status
+</pre>
+<p>The first section starts with "Device selected". For each house code, the
+number of devices seen by mochad on PL or RF is shown. "House A: 1" means
+one device was seen using house code A. The next section lists which 
+unit/device codes were seen. "House B: 5" means five devices were seen using
+house code B. This information could be used to allocate memory or print
+HTML table headers.
+</p><p>The next section starts with "Device status". For each house code, and
+for each unit/device was seen, the device status is shown. "House A: 1=1"
+means for house code A, unit/device 1 is ON (=1). "House B: 1=0,2=0,3=0,4=0,5=0"
+means for house code B unit/devices 1 through 5 are OFF (=0). 
+</p><p>WARNING: The on/off status is not completely accurate. There are many X10 commands
+including ON, OFF, ALL_LIGHTS_ON, ALL_LIGHTS_OFF, ALL_UNITS_OFF, etc. and X10
+devices respond to some but not all commands. mochad does not know the
+capabilities of each X10 device so can only guess whether the device is really
+ON or OFF. Very few X10 devices report their status (RR501 is one) so this feature
+is mostly useful for determining which X10 house/unit codes are in use.
+</p><p>mochad watching PL and RF packets for ON/OFF commands.
+</p><p>The last section starts with "Security sensor status". 
+</p>
+<pre>   Sensor addr: 569E80 Last: 39:09 Motion_normal_MS10A
+</pre>
+<p>This means an update from an MS10A was received 39 minutes and 09 seconds ago.
+The MS10A is in its normal (no motion detected) state. The sensor address is
+569E80.
+</p>
+<pre>   Sensor addr: 9FAA00 Last: 50:02 Contact_alert_min_DS10A 
+</pre>
+<p>This means an update from a DS10A was received 50 minutes and 02 seconds ago.
+The DS10A is in its alert (door or window open) state. The sensor address is
+9FAA00.
+</p><p>The last section is ends with "End status".
+</p>
+<a name="Event_Messages" id="Event_Messages"></a><h2> <span class="mw-headline"> Event Messages </span></h2>
+<p>mochad sends the following event messages to all TCP clients when the
+CM15A/CM19A controller receives or sends on PL or RF.
+</p>
+<a name="Receive_event_messages" id="Receive_event_messages"></a><h3> <span class="mw-headline"> Receive event messages </span></h3>
+<p>For example, the A1 ON button is pressed on an RF remote control (KR19A) and
+the RF packet is received by a CM15A. The following receive (Rx) event message
+will be sent to all clients.
+</p>
+<pre>   12/17 01:24:04 Tx RF HouseUnit: A1 Func: On
+</pre>
+<a name="Power_Line" id="Power_Line"></a><h4> <span class="mw-headline"> Power Line </span></h4>
+<pre>    mm/dd hh:mm:ss Rx PL HouseUnit: &lt;H&gt;&lt;U&gt;
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: All units off
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: All lights on
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: On
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: Off
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: Dim &lt;Dims&gt;
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: Bright &lt;Dims&gt;
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: Ext code 1 Data: &lt;Xdims&gt; Command: 31
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: All lights off 
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: Status on
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: Status off
+    mm/dd hh:mm:ss Rx PL House: &lt;H&gt; Func: Status request
+</pre>
+<a name="Radio_Frequency" id="Radio_Frequency"></a><h4> <span class="mw-headline"> Radio Frequency </span></h4>
+<pre>    mm/dd hh:mm:ss Rx RF House: &lt;H&gt;&lt;U&gt; Func: On
+    mm/dd hh:mm:ss Rx RF House: &lt;H&gt;&lt;U&gt; Func: Off
+    mm/dd hh:mm:ss Rx RF House: &lt;H&gt;&lt;U&gt; Func: Dim
+    mm/dd hh:mm:ss Rx RF House: &lt;H&gt;&lt;U&gt; Func: Bright
+</pre>
+<a name="RF_Security" id="RF_Security"></a><h4> <span class="mw-headline"> RF Security </span></h4>
+<p>Older devices send an 8 bit address.
+</p>
+<pre>    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr8&gt; Func: Arm_Home_min_SH624
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr8&gt; Func: Arm_Away_min_SH624
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr8&gt; Func: Arm_Home_max_SH624
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr8&gt; Func: Arm_Away_max_SH624
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr8&gt; Func: Disarm_SH624
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr8&gt; Func: Panic_SH624
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr8&gt; Func: Lights_On_SH624
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr8&gt; Func: Lights_Off_SH624
+</pre>
+<p>Newer devices send a 17 bit address.
+</p>
+<pre>    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Motion_alert_MS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Motion_normal_MS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Contact_alert_min_DS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Contact_normal_min_DS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Contact_alert_max_DS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Contact_normal_max_DS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Contact_alert_min_low_DS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Contact_normal_min_low_DS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Contact_alert_max_low_DS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Contact_normal_max_low_DS10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Arm_KR10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Disarm_KR10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Lights_On_KR10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Lights_Off_KR10A
+    mm/dd hh:mm:ss Rx RFSEC Addr: &lt;Secaddr17&gt; Func: Panic_KR10A
+</pre>
+<a name="RF_Camera" id="RF_Camera"></a><h4> <span class="mw-headline"> RF Camera </span></h4>
+<pre>    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMUP
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMDOWN
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMLEFT
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMRIGHT
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMCENTER
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMSWEEP
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET1
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET2
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET3
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET4
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET5
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET6
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET7
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET8
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMPRESET9
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET1
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET2
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET3
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET4
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET5
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET6
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET7
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET8
+    mm/dd hh:mm:ss Rx RFCAM &lt;H&gt; CAMEDITPRESET9
+</pre>
+<a name="Transmit_event_messages" id="Transmit_event_messages"></a><h3> <span class="mw-headline"> Transmit event messages </span></h3>
+<p>When a command is processed resulting in the controller sending on PL or RF, a
+transmit (Tx) event message is generated identical the messages in the previous
+section except Rx is replaced with Tx.
+</p><p>For example, a client sends the command "pl a1 on\n". All clients will receive
+notification that the CM15A transmitted via the following two lines.
+</p>
+<pre>   12/17 01:19:50 Tx PL HouseUnit: A1
+   12/17 01:19:50 Tx PL House: A Func: On
+</pre>
+</body>
+</html>

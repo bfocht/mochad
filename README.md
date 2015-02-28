@@ -1,5 +1,7 @@
 #mochad
 
+######Archived documentation pages: https://bfocht.github.io/mochad
+
 mochad is a Linux TCP gateway daemon for the X10 CM15A RF (radio frequency) and
 PL (power line) controller and the CM19A RF controller. 
 

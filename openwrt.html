@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+</head>
+<body>
+<div id="column-content">
+	<div id="content">
+		<a name="top" id="top"></a>
+				<h1 id="firstHeading" class="firstHeading">OpenWrt</h1>
+		<div id="bodyContent">
+			<h3 id="siteSub">From mochad</h3>
+			<div id="contentSub"></div>
+									<div id="jump-to-nav">Jump to: <a href="#column-one">navigation</a>, <a href="#searchInput">search</a></div>			<!-- start content -->
+			<p><big>Using mochad on OpenWrt</big>
+</p><p>mochad works on OpenWrt devices but is not currently in the public package
+feeds. It can be easily added to the OpenWrt build environment.
+</p>
+<a name="Get_OpenWrt" id="Get_OpenWrt"></a><h2> <span class="mw-headline"> Get OpenWrt </span></h2>
+<p>Get the OpenWrt source here and setup the build environment. I suggest
+using the backfire branch but mochad works on trunk also. 
+</p><p>For the kamikaze 8.09 branch, see the last section.
+</p><p>&lt;<a href="http://wiki.openwrt.org/doc/howto/build" class="external free" title="http://wiki.openwrt.org/doc/howto/build" rel="nofollow">http://wiki.openwrt.org/doc/howto/build</a>&gt;
+</p>
+<a name="Add_mochad_to_trunk_or_backfire" id="Add_mochad_to_trunk_or_backfire"></a><h2> <span class="mw-headline"> Add mochad to trunk or backfire </span></h2>
+<p>Assume the OpenWrt build directory is ~/openwrt/backfire.
+</p>
+<pre>$ cd ~/openwrt/backfire/package
+$ mkdir mochad
+$ wget http://sourceforge.net/projects/mochad/files/openwrt/Makefile
+$ cd ..
+$ ./scripts/feeds update -a
+$ ./scripts/feeds install -a
+$ make menuconfig
+# Go to the Utilities menu and select mochad by pressing 'Y'. Exit
+# and save changes.
+$ make
+</pre>
+<p>mochad will be included in the firmware image file. The next step is
+to upgrade or upload the new firmware image file to your router or NAS.
+</p><p>mochad is known to work with OpenWrt backfire branch on the LinkSys NSLU2 and
+Buffalo WZR-HP-G300NH.
+</p>
+<a name="Add_mochad_to_kamikaze_8.09" id="Add_mochad_to_kamikaze_8.09"></a><h2> <span class="mw-headline"> Add mochad to kamikaze 8.09 </span></h2>
+<p>mochad does not build in the kamikaze 8.09 branch because libusb-1.0 is
+not available. 
+</p><p>The following does allow mochad to build but I do not have hardware to test
+this so I make no guarantees.
+</p><p>First, get the source code.
+</p>
+<pre>$ mkdir kamikaze
+$ cd kamikaze
+$ svn co svn://svn.openwrt.org/openwrt/branches/8.09
+$ cd 8.09
+</pre>
+<p>Update the package feeds.
+</p>
+<pre>$ ./scripts/feeds update -a
+$ ./scripts/feeds install -a
+</pre>
+<p>Run menuconfig and select Target System and Target Profile. Exit and save.
+</p>
+<pre>make menuconfig
+</pre>
+<p>The following builds everything so will take a long time.
+</p>
+<pre>$ make
+</pre>
+<p>If this is not successful, see the following.
+</p><p>&lt;<a href="http://wiki.openwrt.org/doc/howto/build" class="external free" title="http://wiki.openwrt.org/doc/howto/build" rel="nofollow">http://wiki.openwrt.org/doc/howto/build</a>&gt;
+</p><p>libusb-1.0 is not available in the 8.09 branch so copy the package Makefile
+from backfire. This assumes you have checked out backfire in ~/backfire. I am
+not sure if any changes are needed to the Makefile because I do not have the
+hardware to test this.
+</p>
+<pre>$ cd package
+$ mkdir libusb-1.0
+$ cp ~/backfire/feeds/packages/libs/libusb-1.0/Makefile libusb-1.0
+</pre>
+<p>Get the mochad package Makefile. The package build system will get the source
+code when needed.
+</p>
+<pre>$ mkdir mochad
+$ cd mochad
+$ wget http://sourceforge.net/projects/mochad/files/openwrt/Makefile
+$ cd ../..
+</pre>
+<pre>$ make menuconfig
+</pre>
+<p>Go to the Utilties menu then select mochad by pressing 'Y'.
+libusb-1.0 is a dependency so will be automatically selected.
+Exit and save configuration
+</p><p>Build again.
+</p>
+<pre>$ make 
+</pre>
+<p>The bin directory should contain images with mochad "baked" in.
+</p>
+</body>
+</html>
