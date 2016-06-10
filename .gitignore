@@ -9,6 +9,5 @@ autoscan.log
 config.log
 config.status
 aclocal.m4
-Makefile
 !opkg/Makefile
 config.h*

@@ -1,12 +1,11 @@
 #mochad
 
-######Archived documentation pages: https://bfocht.github.io/mochad
+#####Archived documentation pages: https://bfocht.github.io/mochad
 
 mochad is a Linux TCP gateway daemon for the X10 CM15A RF (radio frequency) and
 PL (power line) controller and the CM19A RF controller. 
 
 mochad stands for Multiple Online Controllers for Home Automation Daemon.
-
 
 0.1.17 Removed Open Remote/XML Support, change response to be comma separated value (CSV)
 0.1.16 Fix "Could not find endpoints" problem.
@@ -23,28 +22,17 @@ mochad stands for Multiple Online Controllers for Home Automation Daemon.
   This version of mochad is highly modified for my vera plugin.  The response format has been changed. See Sample output format below
 
 
-## Build it
+## Build it 
 
-mochad compiles and runs on Ubuntu 10.04 and 10.10. The libusb-1.0 development
-files are required. To install,
+mochad currently compiles and runs on Raspberry Pi RASPBIAN JESSIE LITE
+The libusb-1.0 development files are required. To install,
 
+```    
     sudo apt-get install libusb-1.0-0-dev
-
-If you are building on a Beagleboard/Beaglebone (http://beagleboard.org)
-using the native compiler, do the following to install libusb-1.0.
-
-    opkg install libusb-1.0-dev
-
-The usual pattern for building the code applies.
-
-    tar xzf mochad-...tar.gz
-    cd mochad-...
-    ./configure
     make
     sudo make install
 
-Please see http://sourceforge.net/apps/mediawiki/mochad/index.php?title=Main_Page
-for details on building for OpenWrt.
+```
 
 ## Run it
 
@@ -185,19 +173,8 @@ repeater. This ensures the CM15A behaves like a transceiver.
 ## Files
 
     *.c *.h     -- C source files
-    mochamon.pl -- Perl program showing how to connect to three instance of 
-                    mochad and dumping out the output to standard out.
-    cgi/        -- Sample Perl CGI utilizing more than one mochad
 
 ## Acknowledgments
-
-The Perl CGI scripts uses the venerable cgi-lib.pl copyright Steven E. Brenner.
-cgi-lib is simpler and smaller than CGI.pm which is appropriate for small
-embedded systems such as WiFi routers. 
-
-For OpenWrt based systems, using LuCi would make more sense than Perl since
-LuCi is already present in the system. However, the Perl CGI scripts work fine
-with lighttpd on OpenWrt.
 
 This project in not in any way affliated with X10 Corp. (www.x10.com). Do
 not contact them about this driver since they know nothing about it.
@@ -206,19 +183,9 @@ not contact them about this driver since they know nothing about it.
 
 The following documents were useful in development of this program.
 
-X10 Power Line Protocol
-
-    <http://software.x10.com/pub/manuals/xtc798.doc>
-    <http://software.x10.com/pub/manuals/xtc798.pdf>
-    <http://software.x10.com/pub/manuals/xtdcode.pdf>
-
 X10 RF including RF Security Protocol
 
     <http://www.edcheung.com/automa/rf.txt>
-
-X10 CM11A Protocol
-
-    <http://software.x10.com/pub/manuals/cm11a_protocol.txt>
 
 Linux Daemon HowTo
 
